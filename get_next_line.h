@@ -6,7 +6,7 @@
 /*   By: kbagot <kbagot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/07 15:11:42 by kbagot            #+#    #+#             */
-/*   Updated: 2016/12/12 20:50:43 by kbagot           ###   ########.fr       */
+/*   Updated: 2016/12/13 15:21:20 by kbagot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include "stdlib.h"
 # include "fcntl.h"//tmp open
 # include "stdio.h"//tmp printf
-# define BUFF_SIZE 100
+# define BUFF_SIZE 10
 
 typedef struct	s_list
 {
@@ -34,5 +34,6 @@ char	*ft_strchr(const char *src, int c);
 char	*ft_strjoin(char *s1, char const *s2);
 void	*ft_strnew(size_t size);
 t_list	*ft_lstnew(void const *content, size_t content_size);
+t_list	*ft_lstadd(t_list **alst, t_list *new);
 
 #endif

@@ -6,13 +6,13 @@
 /*   By: kbagot <kbagot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/07 14:37:51 by kbagot            #+#    #+#             */
-/*   Updated: 2016/12/12 20:50:41 by kbagot           ###   ########.fr       */
+/*   Updated: 2016/12/13 15:21:17 by kbagot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_makeline(char *lst, char **line)
+int		ft_makeline(char *lst, char **line)
 {
 	int		i;
 
@@ -20,55 +20,78 @@ char	*ft_makeline(char *lst, char **line)
 	while (lst[i] != '\n')
 		i++;
 	lst[i] = '\0';
-	line = (char**)malloc(sizeof(char*) * 2);
 	line[1] = NULL;
-	line[0]	= ft_strnew(i);
-	ft_strcpy(line[0], lst);
-	ft_strcpy(lst, &lst[i + 1]);
-	printf("save : %s|||||\n", line[0]);
-	return (lst);
+	line[0] = ft_strnew(i);
+	line[0] = ft_strcpy(&line[0][0], lst);
+	lst = ft_strcpy(lst, &lst[i + 1]);
+	return (1);
+}
+
+t_list	*ft_find_fd(t_list *rstr, int fd)
+{
+	t_list	*saverstr;
+	t_list	*new;
+
+	saverstr = rstr;
+	if (rstr == NULL)
+	{
+		rstr = ft_lstnew(NULL, fd);
+		rstr->fdsave = fd;
+		rstr->rstr = ft_strnew(BUFF_SIZE);
+		return (rstr);
+	}
+	while (rstr)
+	{
+		if (rstr->fdsave == (unsigned int)fd)
+			return (rstr);
+		rstr = rstr->next;
+	}
+	new = ft_lstnew(NULL, fd);
+	new->fdsave = fd;
+	new->rstr = ft_strnew(BUFF_SIZE);
+	ft_lstadd(&saverstr, new);
+	return (saverstr);
 }
 
 int		get_next_line(const int fd, char **line)
 {
 	char			*buff;
 	static t_list	*rstr = NULL;
-	char			*lst;
-	int				ret;
-	char			*tmp;
+	char			*stop;
 
-	lst = NULL;
-	if (rstr == NULL)
-	{//if  fd non existent
-		rstr = ft_lstnew(lst, fd);
-		rstr->rstr = ft_strnew(BUFF_SIZE);
-	}
+	stop = NULL;
+	rstr = ft_find_fd(rstr, fd);
 	buff = ft_strnew(BUFF_SIZE);
-	tmp = NULL;
-	while (tmp == NULL)
+	while (stop == NULL && read(fd, buff, BUFF_SIZE))
 	{
-		ret = read(fd, buff, BUFF_SIZE);
-		tmp = ft_strchr(buff, '\n');
+		stop = ft_strchr(buff, '\n');
 		rstr->rstr = ft_strjoin(rstr->rstr, buff);
 	}
-//	printf("read : %s|||||\n", rstr->rstr);
-	rstr->rstr = ft_makeline(rstr->rstr, line);
-//	printf("save : %s|||||\n", rstr->rstr);
-	return (0);
+	if (ft_makeline(rstr->rstr, line))
+		return (1);
+	return (-1);
 }
 
 int		main(int argc, char **argv)
 {
-	char **line;
-	int	fd;
-	int lol;
+	char	**line;
+	int		fd;
+	int 	fd2;
+	int		lol;
 
-	lol = 5;
-	if (argc != 2)
-		return (0);
-	fd = open(argv[1], O_RDONLY);
-	line = NULL;
-	while (lol-- > 1)
-		get_next_line(fd, line);
+	lol = 8;
+	if (argc)
+	{
+		line = (char**)malloc(sizeof(char*) * 2);
+		fd = open(argv[1], O_RDONLY);
+		fd2 = open(argv[2], O_RDONLY);
+		while (lol-- > 1)
+		{
+			get_next_line(fd2, line);
+			printf("ligne : %s|||||\n", line[0]);
+			get_next_line(fd, line);
+			printf("ligne : %s|||||\n", line[0]);
+		}
+	}
 	return (0);
 }
