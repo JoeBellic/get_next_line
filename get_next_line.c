@@ -6,40 +6,37 @@
 /*   By: kbagot <kbagot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/07 14:37:51 by kbagot            #+#    #+#             */
-/*   Updated: 2016/12/14 20:17:14 by kbagot           ###   ########.fr       */
+/*   Updated: 2016/12/15 16:41:12 by kbagot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int		ft_makeline(char *lst, char **line)
+static int		ft_makeline(char *lst, char **line)
 {
 	int		i;
-//	int		f;
+	int		fin;
 
-//	f = 0;
+	fin = 0;
 	i = 0;
 	if (lst[i] != '\0' && lst)
 	{
 		while (lst[i] != '\n' && lst[i])
 			i++;
-//		if (lst[i] != '\n' || lst[i + 1] == '\0')
-//			f = 1;//ET BUFF SIZE != 1   BUT  WHY ??????!!!
+		if (lst[i] == '\0')
+			fin = 1;
 		lst[i] = '\0';
 		*line = ft_strnew(i);
 		*line = ft_strcpy(*line, lst);
 		lst = ft_strcpy(lst, &lst[i + 1]);
-//		if (f == 1)
-//		{
-//			free(lst);
-//			lst = NULL;
-//		}
+		if (fin == 1)
+			lst[0] = '\0';
 		return (1);
 	}
 	return (0);
 }
 
-t_list	*ft_find_fd(t_list *rstr, int fd)
+static t_list	*ft_find_fd(t_list *rstr, int fd)
 {
 	t_list	*saverstr;
 	t_list	*new;
@@ -65,7 +62,7 @@ t_list	*ft_find_fd(t_list *rstr, int fd)
 	return (saverstr);
 }
 
-int		get_next_line(const int fd, char **line)
+int				get_next_line(const int fd, char **line)
 {
 	char			*buff;
 	static t_list	*rstr = NULL;
@@ -81,7 +78,7 @@ int		get_next_line(const int fd, char **line)
 	{
 		if (ret == -1)
 			return (-1);
-		buff[ret] = '\0';
+		ft_bzero(&buff[ret], BUFF_SIZE - ret);
 		stop = ft_strchr(buff, '\n');
 		rstr->content = ft_strjoin(rstr->content, buff);
 	}
