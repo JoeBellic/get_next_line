@@ -6,7 +6,7 @@
 /*   By: kbagot <kbagot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/07 14:37:51 by kbagot            #+#    #+#             */
-/*   Updated: 2016/12/16 19:55:21 by kbagot           ###   ########.fr       */
+/*   Updated: 2016/12/19 18:38:11 by kbagot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int				get_next_line(const int fd, char **line)
 	t_list			*saverstr;
 
 	saverstr = NULL;
-	if (fd < 0 || !line)
+	if (fd < 0 || !line || BUFF_SIZE <= 0)
 		return (-1);
 	saverstr = rstr;
 	rstr = ft_find_fd(rstr, fd);
