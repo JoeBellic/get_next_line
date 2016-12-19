@@ -6,13 +6,13 @@
 /*   By: kbagot <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/10 19:03:43 by kbagot            #+#    #+#             */
-/*   Updated: 2016/11/14 18:42:04 by kbagot           ###   ########.fr       */
+/*   Updated: 2016/12/19 20:46:01 by kbagot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_strnew(size_t size)
+char	*ft_strnew(size_t size)
 {
 	char	*mem;
 
